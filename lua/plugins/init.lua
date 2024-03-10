@@ -1,11 +1,30 @@
 local minideps = require("mini.deps")
-local add, now, later = minideps.add, minideps.now, minideps.later
+local add, now = minideps.add, minideps.now
 
--- Use external plugins with `add()`
 now(function()
-  -- Add to current session (install if absent)
   add("nvim-tree/nvim-web-devicons")
   require("nvim-web-devicons").setup()
 end)
+now(function()
+  add("lewis6991/gitsigns.nvim")
+  require("gitsigns").setup({
+    signs = {
+      add = { text = "▎" },
+      change = { text = "▎" },
+      delete = { text = "" },
+      topdelete = { text = "" },
+      changedelete = { text = "▎" },
+      untracked = { text = "▎" },
+    },
+  })
+end)
 
+require("plugins.bufferline")
+require("plugins.catppuccin")
+require("plugins.cmp")
+require("plugins.lsp")
+require("plugins.lualine")
 require("plugins.treesitter")
+require("plugins.trouble")
+-- Languages
+require("plugins.lang.typst")

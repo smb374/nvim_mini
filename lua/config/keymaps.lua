@@ -160,5 +160,5 @@ map("n", "<leader>w<right>", "<C-w>l", { desc = "Go to right window" })
 
 map("n", "<M-left>", "<cmd>bp<cr>", { desc = "Previous Buffer" })
 map("n", "<M-right>", "<cmd>bn<cr>", { desc = "Next Buffer" })
-map("n", "<leader>bh", "<cmd>bp<cr>", { desc = "Previous Buffer" })
-map("n", "<leader>bl", "<cmd>bn<cr>", { desc = "Next Buffer" })
+-- map("n", "<leader>bh", "<cmd>bp<cr>", { desc = "Previous Buffer" })
+-- map("n", "<leader>bl", "<cmd>bn<cr>", { desc = "Next Buffer" })
