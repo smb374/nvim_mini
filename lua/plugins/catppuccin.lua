@@ -1,12 +1,8 @@
-local minideps = require("mini.deps")
-local add, now = minideps.add, minideps.now
-
-now(function ()
-  add({
-    source = "catppuccin/nvim",
-    name = "catppuccin",
-  })
-  require("catppuccin").setup({
+return {
+  "catppuccin/nvim",
+  lazy = true,
+  name = "catppuccin",
+  opts = {
     integrations = {
       aerial = true,
       alpha = true,
@@ -42,6 +38,5 @@ now(function ()
       treesitter_context = true,
       which_key = true,
     },
-  })
-  vim.cmd.colorscheme("catppuccin")
-end)
+  },
+}

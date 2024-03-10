@@ -1,12 +1,16 @@
-local minideps = require("mini.deps")
-local add, later = minideps.add, minideps.later
-
-later(function()
-  add({
-    source = "akinsho/bufferline.nvim",
-    depends = { "nvim-tree/nvim-web-devicons" },
-  })
-  require("bufferline").setup({
+return {
+  "akinsho/bufferline.nvim",
+  event = "VeryLazy",
+  keys = {
+    { "<leader>bp", "<Cmd>BufferLineTogglePin<CR>",            desc = "Toggle pin" },
+    { "<leader>bP", "<Cmd>BufferLineGroupClose ungrouped<CR>", desc = "Delete non-pinned buffers" },
+    { "<leader>bo", "<Cmd>BufferLineCloseOthers<CR>",          desc = "Delete other buffers" },
+    { "<leader>br", "<Cmd>BufferLineCloseRight<CR>",           desc = "Delete buffers to the right" },
+    { "<leader>bl", "<Cmd>BufferLineCloseLeft<CR>",            desc = "Delete buffers to the left" },
+    { "<M-left>",   "<cmd>BufferLineCyclePrev<cr>",            desc = "Prev buffer" },
+    { "<M-right>",  "<cmd>BufferLineCycleNext<cr>",            desc = "Next buffer" },
+  },
+  opts = {
     options = {
       -- stylua: ignore
       close_command = function(n) require("mini.bufremove").delete(n, false) end,
@@ -21,13 +25,16 @@ later(function()
         return vim.trim(ret)
       end,
     },
-  })
-  local map = vim.keymap.set
-  map("n", "<leader>bp", "<Cmd>BufferLineTogglePin<CR>", { desc = "Toggle pin" })
-  map("n", "<leader>bP", "<Cmd>BufferLineGroupClose ungrouped<CR>", { desc = "Delete non-pinned buffers" })
-  map("n", "<leader>bo", "<Cmd>BufferLineCloseOthers<CR>", { desc = "Delete other buffers" })
-  map("n", "<leader>br", "<Cmd>BufferLineCloseRight<CR>", { desc = "Delete buffers to the right" })
-  map("n", "<leader>bl", "<Cmd>BufferLineCloseLeft<CR>", { desc = "Delete buffers to the left" })
-  map("n", "<M-left>", "<cmd>BufferLineCyclePrev<cr>", { desc = "Prev buffer" })
-  map("n", "<M-right>", "<cmd>BufferLineCycleNext<cr>", { desc = "Next buffer" })
-end)
+  },
+  config = function(_, opts)
+    require("bufferline").setup(opts)
+    -- Fix bufferline when restoring a session
+    vim.api.nvim_create_autocmd("BufAdd", {
+      callback = function()
+        vim.schedule(function()
+          pcall(nvim_bufferline)
+        end)
+      end,
+    })
+  end,
+}

@@ -1,20 +1,7 @@
-local minideps = require("mini.deps")
-local add, later = minideps.add, minideps.later
-
-later(function()
-  add({
-    source = "nvim-treesitter/nvim-treesitter",
-    -- Use 'master' while monitoring updates in 'main'
-    checkout = "master",
-    monitor = "main",
-    -- Perform action after every checkout
-    hooks = {
-      post_checkout = function()
-        vim.cmd("TSUpdate")
-      end,
-    },
-  })
-  require("nvim-treesitter.configs").setup({
+return {
+  "nvim-treesitter/nvim-treesitter",
+  build = ":TSUpdate",
+  opts = {
     highlight = { enable = true, additional_vim_regex_highlighting = {} },
     indent = { enable = true },
     context_commentstring = { enable = true, enable_autocmd = false },
@@ -77,5 +64,5 @@ later(function()
       "yuck",
       "zig",
     },
-  })
-end)
+  }
+}
