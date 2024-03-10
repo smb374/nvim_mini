@@ -13,7 +13,12 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
   spec = {
-    "folke/lazy.nvim",
+    {
+      "folke/lazy.nvim",
+      keys = {
+        { "<leader>l", "<cmd>Lazy<cr>", desc = "Open Lazy." },
+      },
+    },
     {
       "echasnovski/mini.nvim",
       config = function()

@@ -1,5 +1,6 @@
 return {
   "nvim-treesitter/nvim-treesitter",
+  event = { "BufReadPost", "BufNewFile", "BufWritePre", "VeryLazy" },
   build = ":TSUpdate",
   opts = {
     highlight = { enable = true },
