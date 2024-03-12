@@ -1,3 +1,31 @@
+local augroup = require("lib").augroup
+
+-- Disable indentscope on some buffers.
+vim.api.nvim_create_autocmd("FileType", {
+  group = augroup("disable_indentscope"),
+  pattern = {
+    "alpha",
+    "coc-explorer",
+    "dashboard",
+    "fzf", -- fzf-lua
+    "help",
+    "lazy",
+    "lazyterm",
+    "lspsagafinder",
+    "mason",
+    "neo-tree",
+    "nnn",
+    "notify",
+    "NvimTree",
+    "qf",
+    "toggleterm",
+    "Trouble",
+  },
+  callback = function(_)
+    vim.b.miniindentscope_disable = true
+  end,
+})
+
 local indentscope = require("mini.indentscope")
 indentscope.setup({
   draw = {
@@ -6,23 +34,4 @@ indentscope.setup({
   },
   symbol = "│",
   options = { try_as_border = true },
-})
-
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = {
-    "help",
-    "alpha",
-    "dashboard",
-    "neo-tree",
-    "Trouble",
-    "trouble",
-    "lazy",
-    "mason",
-    "notify",
-    "toggleterm",
-    "lazyterm",
-  },
-  callback = function()
-    vim.b.miniindentscope_disable = true
-  end,
 })

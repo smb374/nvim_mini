@@ -6,10 +6,9 @@ return {
     end
   },
   {
-    "mason-lspconfig.nvim",
+    "nvim-lspconfig",
     opts = function(_, opts)
       vim.list_extend(opts.ensure_installed, { "pyright" })
     end,
   },
 }
-

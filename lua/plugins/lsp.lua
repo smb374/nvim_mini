@@ -33,29 +33,18 @@ return {
     end
   },
   {
-    "williamboman/mason-lspconfig.nvim",
-    dependencies = { "VonHeikemen/lsp-zero.nvim" },
-    opts = function()
-      local lsp_zero = require("lsp-zero")
-      return {
-        ensure_installed = {},
-        handlers = {
-          lsp_zero.default_setup,
-        },
-      }
-    end,
-  },
-  {
     "neovim/nvim-lspconfig",
     event = { "BufReadPost", "BufNewFile", "BufWritePre" },
     dependencies = {
       { "folke/neoconf.nvim", cmd = "Neoconf", config = true, dependencies = { "nvim-lspconfig" } },
       { "folke/neodev.nvim",  opts = {} },
+      "VonHeikemen/lsp-zero.nvim",
       "mason.nvim",
-      "mason-lspconfig.nvim",
+      "williamboman/mason-lspconfig.nvim",
     },
     opts = {
       external_servers = {},
+      ensure_installed = {},
     },
     config = function(_, opts)
       local lsp_zero = require("lsp-zero")
@@ -65,6 +54,12 @@ return {
         lsp_zero.default_keymaps({ buffer = bufnr })
         lsp_zero.buffer_autoformat()
       end)
+      require("mason-lspconfig").setup({
+        ensure_installed = opts.ensure_installed,
+        handlers = {
+          lsp_zero.default_setup,
+        },
+      })
       local lspconfig = require("lspconfig")
       for _, server in ipairs(opts.external_servers) do
         lspconfig[server].setup({
