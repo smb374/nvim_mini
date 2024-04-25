@@ -5,7 +5,7 @@ local map = vim.keymap.set
 map("n", "<leader>sR", function()
   require("mini.pick").builtin.resume()
 end, { desc = "Resume Last Picker" })
-map("n", "<leader>sP", function()
+map("n", "<leader>sG", function()
   require("mini.pick").builtin.grep_live({ tool = "rg" })
 end, { desc = "Grep Pattern (Live Feedback)" })
 map("n", "<leader>sh", function()

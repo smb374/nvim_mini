@@ -30,14 +30,14 @@ return {
       else
         ensure_installed()
       end
-    end
+    end,
   },
   {
     "neovim/nvim-lspconfig",
-    event = { "BufReadPost", "BufNewFile", "BufWritePre" },
+    -- event = { "BufReadPost", "BufNewFile", "BufWritePre" },
     dependencies = {
       { "folke/neoconf.nvim", cmd = "Neoconf", config = true, dependencies = { "nvim-lspconfig" } },
-      { "folke/neodev.nvim",  opts = {} },
+      { "folke/neodev.nvim", opts = {} },
       "VonHeikemen/lsp-zero.nvim",
       "mason.nvim",
       "williamboman/mason-lspconfig.nvim",
@@ -45,6 +45,7 @@ return {
     opts = {
       external_servers = {},
       ensure_installed = {},
+      server_config = {},
     },
     config = function(_, opts)
       local lsp_zero = require("lsp-zero")
@@ -62,9 +63,16 @@ return {
       })
       local lspconfig = require("lspconfig")
       for _, server in ipairs(opts.external_servers) do
-        lspconfig[server].setup({
-          mason = false,
-        })
+        if opts.server_config[server] ~= nil then
+          opts.server_config[server].mason = false
+        else
+          lspconfig[server].setup({
+            mason = false,
+          })
+        end
+      end
+      for server, opt in pairs(opts.server_config) do
+        lspconfig[server].setup(opt)
       end
     end,
   },

@@ -7,6 +7,8 @@ return {
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path",
+      "LuaSnip",
+      "saadparwaiz1/cmp_luasnip",
     },
     opts = function()
       vim.api.nvim_set_hl(0, "CmpGhostText", { link = "Comment", default = true })
@@ -25,8 +27,14 @@ return {
           completeopt = "menu,menuone,noselect,noinsert",
         },
         mapping = cmp.mapping.preset.insert({
-          ["<Up>"] = cmp.config.disable,
-          ["<Down>"] = cmp.config.disable,
+          ["<Up>"] = cmp.mapping(function(fallback)
+            cmp.close()
+            fallback()
+          end, { "i" }),
+          ["<Down>"] = cmp.mapping(function(fallback)
+            cmp.close()
+            fallback()
+          end, { "i" }),
           ["<C-n>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
           ["<C-p>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
           ["<C-b>"] = cmp.mapping.scroll_docs(-4),
@@ -57,11 +65,17 @@ return {
             end
           end, { "i", "s" }),
         }),
+        snippet = {
+          expand = function(args)
+            require("luasnip").lsp_expand(args.body)
+          end,
+        },
         sources = cmp.config.sources({
           { name = "nvim_lsp" },
-          { name = "path" },
-        }, {
+          { name = "luasnip" },
           { name = "buffer" },
+        }, {
+          { name = "path" },
         }),
         formatting = {
           format = function(_, item)
@@ -83,7 +97,7 @@ return {
   },
   {
     "L3MON4D3/LuaSnip",
-    event = "InsertEnter",
+    event = "VeryLazy",
     build = (not jit.os:find("Windows"))
         and "echo 'NOTE: jsregexp is optional, so not a big deal if it fails to build'; make install_jsregexp"
         or nil,
@@ -92,20 +106,6 @@ return {
         "rafamadriz/friendly-snippets",
         config = function()
           require("luasnip.loaders.from_vscode").lazy_load()
-        end,
-      },
-      {
-        "nvim-cmp",
-        dependencies = {
-          "saadparwaiz1/cmp_luasnip",
-        },
-        opts = function(_, opts)
-          opts.snippet = {
-            expand = function(args)
-              require("luasnip").lsp_expand(args.body)
-            end,
-          }
-          table.insert(opts.sources, { name = "luasnip" })
         end,
       },
     },

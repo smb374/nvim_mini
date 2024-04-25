@@ -14,7 +14,16 @@ return {
 
     -- All the patterns used to detect root dir, when **"pattern"** is in
     -- detection_methods
-    patterns = { ".git", "_darcs", ".hg", ".bzr", ".svn", "Makefile", "package.json", "src" },
+    patterns = {
+      ".git",
+      "_darcs",
+      ".hg",
+      ".bzr",
+      ".svn",
+      "Makefile",
+      "package.json",
+      "mix.lock"
+    },
 
     -- Table of lsp clients to ignore by name
     -- eg: { "efm", ... }
@@ -45,9 +54,7 @@ return {
     {
       "<leader>pp",
       function()
-        local history = require("project_nvim.utils.history")
-        local pick = require("mini.pick")
-        pick.start({ source = { items = history.get_recent_projects(), name = "Projects" } })
+        require("lib.pickers").pick_project()
       end,
       desc = "Pick Recent Project",
     },

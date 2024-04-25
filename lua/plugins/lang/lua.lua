@@ -17,4 +17,12 @@ return {
       vim.list_extend(opts.ensure_installed, { "stylua" })
     end,
   },
+  {
+    "conform.nvim",
+    opts = function(_, opts)
+      opts.formatters_by_ft.lua = {
+        "stylua"
+      };
+    end
+  },
 }

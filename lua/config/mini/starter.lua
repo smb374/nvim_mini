@@ -11,12 +11,12 @@ vim.api.nvim_create_autocmd("User", {
 local starter = require("mini.starter")
 
 local logo = table.concat({
-  "███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗",
-  "████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║",
-  "██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║",
-  "██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║",
-  "██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║",
-  "╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝",
+  "     ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗     ",
+  "     ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║     ",
+  "     ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║     ",
+  "     ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║     ",
+  "     ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║     ",
+  "     ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝     ",
 }, "\n")
 
 local pad = string.rep(" ", 22)
@@ -32,14 +32,11 @@ local config = {
     new_section("Recent files", "Pick oldfiles", "Pick"),
     new_section("Grep Text", "Pick grep_live", "Pick"),
     new_section("Projects", function()
-      local history = require("project_nvim.utils.history")
-      local pick = require("mini.pick")
-      pick.start({ source = { items = history.get_recent_projects() } })
+      require("lib.pickers").pick_project()
     end, "Pick"),
     new_section("Lazy", "Lazy", "Config"),
     new_section("Edit Config", function()
-      local pick = require("mini.pick")
-      pick.builtin.files({}, { source = { cwd = "~/.config/nvim" } })
+      require("lib.pickers").pick_files_dir(vim.fn.expand("$HOME") .. "/.config/nvim")
     end, "Config"),
     new_section("New file", "ene | startinsert", "Built-in"),
     new_section("Quit", "qa", "Built-in"),

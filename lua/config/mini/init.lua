@@ -1,8 +1,6 @@
 require("mini.extra").setup()
 
-require("mini.notify").setup()
-vim.notify = require("mini.notify").make_notify()
-
+-- require("config.mini.notify")
 require("config.mini.indentscope")
 
 require("config.mini.ai")
@@ -15,8 +13,6 @@ require("config.mini.starter")
 
 require("mini.align").setup()
 require("mini.comment").setup()
+require("mini.jump2d").setup()
 require("mini.operators").setup()
-require("mini.pairs").setup()
--- require("mini.statusline").setup()
 require("mini.surround").setup()
--- require("mini.tabline").setup()

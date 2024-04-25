@@ -45,17 +45,19 @@ clue.setup({
     clue.gen_clues.windows(),
     clue.gen_clues.z(),
     -- Custom Clues
-    { mode = "n", keys = "<Leader>b",     desc = "+Buffers..." },
-    { mode = "n", keys = "<Leader>f",     desc = "+File..." },
-    { mode = "n", keys = "<Leader>w",     desc = "+Windows..." },
-    { mode = "n", keys = "<Leader><Tab>", desc = "+Tabs..." },
+    { mode = "n", keys = "<leader>b",     desc = "+Buffers..." },
+    { mode = "n", keys = "<leader>f",     desc = "+File..." },
+    { mode = "n", keys = "<leader>w",     desc = "+Windows..." },
+    { mode = "n", keys = "<leader><Tab>", desc = "+Tabs..." },
     -- Pick
-    { mode = "n", keys = "<Leader>s",     desc = "+Pick..." },
-    { mode = "n", keys = "<Leader>sg",    desc = "+Pick Git..." },
-    { mode = "n", keys = "<Leader>sl",    desc = "+Pick Lsp..." },
-    { mode = "n", keys = "<Leader>sL",    desc = "+Pick List..." },
+    { mode = "n", keys = "<leader>s",     desc = "+Pick..." },
+    { mode = "n", keys = "<leader>sg",    desc = "+Pick Git..." },
+    { mode = "n", keys = "<leader>sl",    desc = "+Pick Lsp..." },
+    { mode = "n", keys = "<leader>sL",    desc = "+Pick List..." },
     -- Trouble
-    { mode = "n", keys = "<Leader>x",     desc = "+Trouble..." },
+    { mode = "n", keys = "<leader>x",     desc = "+Trouble..." },
+    -- Toggle Term
+    { mode = "n", keys = "<leader>t",     desc = "+Terminal..." },
   },
   window = {
     delay = 50,
