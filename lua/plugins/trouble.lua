@@ -3,11 +3,12 @@ return {
   cmd = { "TroubleToggle", "Trouble" },
   opts = { use_diagnostic_signs = true },
   keys = {
-    { "<leader>xx", function() require("trouble").toggle() end,                        desc = "Toggle Trouble" },
-    { "<leader>xd", function() require("trouble").toggle("document_diagnostics") end,  desc = "Document Diagnostics (Trouble)" },
-    { "<leader>xw", function() require("trouble").toggle("workspace_diagnostics") end, desc = "Workspace Diagnostics (Trouble)" },
-    { "<leader>xq", function() require("trouble").toggle("quickfix") end,              desc = "Quickfix List (Trouble)" },
-    { "<leader>xl", function() require("trouble").toggle("loclist") end,               desc = "Location List (Trouble)" },
+    { "<leader>xx", "<cmd>Trouble diagnostics toggle<cr>",                        desc = "Diagnostics (Trouble)" },
+    { "<leader>xX", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",           desc = "Buffer Diagnostics (Trouble)" },
+    { "<leader>xs", "<cmd>Trouble symbols toggle focus=false<cr>",                desc = "Symbols (Trouble)" },
+    { "<leader>xd", "<cmd>Trouble lsp toggle focus=false win.position=right<cr>", desc = "LSP Definitions / references / ... (Trouble)" },
+    { "<leader>xq", "<cmd>Trouble qflist toggle<cr>",                             desc = "Quickfix List (Trouble)" },
+    { "<leader>xl", "<cmd>Trouble loclist toggle<cr>",                            desc = "Location List (Trouble)" },
     {
       "[q",
       function()

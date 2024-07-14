@@ -37,7 +37,7 @@ return {
     -- event = { "BufReadPost", "BufNewFile", "BufWritePre" },
     dependencies = {
       { "folke/neoconf.nvim", cmd = "Neoconf", config = true, dependencies = { "nvim-lspconfig" } },
-      { "folke/neodev.nvim", opts = {} },
+      { "folke/neodev.nvim",  opts = {} },
       "VonHeikemen/lsp-zero.nvim",
       "mason.nvim",
       "williamboman/mason-lspconfig.nvim",
@@ -51,10 +51,11 @@ return {
       local lsp_zero = require("lsp-zero")
       lsp_zero.extend_lspconfig()
 
-      lsp_zero.on_attach(function(_, bufnr)
+      lsp_zero.on_attach(function(client, bufnr)
         lsp_zero.default_keymaps({ buffer = bufnr })
-        lsp_zero.buffer_autoformat()
+        lsp_zero.buffer_autoformat(client, bufnr)
       end)
+
       require("mason-lspconfig").setup({
         ensure_installed = opts.ensure_installed,
         handlers = {
