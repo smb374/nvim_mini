@@ -2,10 +2,10 @@ return {
   "akinsho/toggleterm.nvim",
   version = "*",
   keys = function(_, _)
-    local Terminal = require("toggleterm.terminal").Terminal
-    local lazygit  = Terminal:new({ cmd = "lazygit", hidden = true, direction = "float" })
+    -- local Terminal = require("toggleterm.terminal").Terminal
+    -- local lazygit  = Terminal:new({ cmd = "lazygit", hidden = true, direction = "float" })
     return {
-      { "<leader>gg", function() lazygit:toggle() end,            desc = "LazyGit" },
+      -- { "<leader>gg", function() lazygit:toggle() end,            desc = "LazyGit" },
       { "<C-/>",      "<cmd>ToggleTerm direction=float<cr>",      desc = "Toggle Terminal (Float)",      mode = "n" },
       { "<C-_>",      "<cmd>ToggleTerm direction=float<cr>",      desc = "Toggle Terminal (Float)",      mode = "n" },
       { "<leader>th", "<cmd>ToggleTerm direction=horizontal<cr>", desc = "Toggle Terminal (Horizontal)", mode = "n" },
@@ -19,9 +19,9 @@ return {
       group = vim.api.nvim_create_augroup("set_term_keymap", { clear = true }),
       pattern = "term://*",
       callback = function()
-        local opts = { buffer = 0 }
+        local opts_ = { buffer = 0 }
         local set_map = function(key, action)
-          vim.keymap.set("t", key, action, opts)
+          vim.keymap.set("t", key, action, opts_)
         end
         local maps = {
           { '<esc>', "<C-\\><C-n>", },
