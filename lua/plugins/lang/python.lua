@@ -3,12 +3,12 @@ return {
     "nvim-treesitter",
     opts = function(_, opts)
       vim.list_extend(opts.ensure_installed, { "python" })
-    end
+    end,
   },
   {
     "nvim-lspconfig",
     opts = function(_, opts)
-      vim.list_extend(opts.ensure_installed, { "pyright" })
+      vim.list_extend(opts.ensure_installed, { "pyright", "ruff" })
     end,
   },
   {
@@ -17,8 +17,8 @@ return {
       opts.formatters_by_ft.python = {
         "isort",
         "ruff_format",
-      };
-    end
+      }
+    end,
   },
   {
     "nvim-lint",
@@ -26,6 +26,6 @@ return {
       opts.linters_by_ft.python = {
         "ruff",
       }
-    end
+    end,
   },
 }

@@ -37,10 +37,12 @@ return {
     -- event = { "BufReadPost", "BufNewFile", "BufWritePre" },
     dependencies = {
       { "folke/neoconf.nvim", cmd = "Neoconf", config = true, dependencies = { "nvim-lspconfig" } },
-      { "folke/neodev.nvim",  opts = {} },
-      "VonHeikemen/lsp-zero.nvim",
+      { "folke/neodev.nvim", opts = {} },
+      { "VonHeikemen/lsp-zero.nvim", branch = "v4.x" },
       "mason.nvim",
       "williamboman/mason-lspconfig.nvim",
+      "lukas-reineke/lsp-format.nvim",
+      "hrsh7th/cmp-nvim-lsp",
     },
     opts = {
       external_servers = {},
@@ -49,12 +51,17 @@ return {
     },
     config = function(_, opts)
       local lsp_zero = require("lsp-zero")
-      lsp_zero.extend_lspconfig()
 
-      lsp_zero.on_attach(function(client, bufnr)
-        lsp_zero.default_keymaps({ buffer = bufnr })
-        lsp_zero.buffer_autoformat(client, bufnr)
-      end)
+      local lsp_attach = function(client, bufnr)
+        lsp_zero.default_keymaps({ buffer = bufnr, preserve_mappings = false })
+        if client.supports_method("textDocument/formatting") then
+          require("lsp-format").on_attach(client)
+        end
+      end
+      lsp_zero.extend_lspconfig({
+        sign_text = true,
+        lsp_attach = lsp_attach,
+      })
 
       require("mason-lspconfig").setup({
         ensure_installed = opts.ensure_installed,
