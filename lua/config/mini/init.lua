@@ -1,6 +1,9 @@
 require("mini.extra").setup()
+-- require("config.mini.base16")
 
 -- require("config.mini.notify")
+require("mini.icons").setup()
+MiniIcons.mock_nvim_web_devicons()
 require("config.mini.indentscope")
 
 require("config.mini.ai")
@@ -10,9 +13,13 @@ require("config.mini.files")
 require("config.mini.hipatterns")
 require("config.mini.pick")
 require("config.mini.starter")
+-- require("config.mini.statusline")
+require("config.mini.tabline")
 
 require("mini.align").setup()
 require("mini.comment").setup()
+require("mini.cursorword").setup()
 require("mini.jump2d").setup()
 require("mini.operators").setup()
+require("mini.pairs").setup()
 require("mini.surround").setup()

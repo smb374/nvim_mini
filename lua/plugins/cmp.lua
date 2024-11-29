@@ -9,7 +9,7 @@ return {
       "hrsh7th/cmp-path",
       "LuaSnip",
       "saadparwaiz1/cmp_luasnip",
-      "hrsh7th/cmp-nvim-lsp-signature-help"
+      -- "hrsh7th/cmp-nvim-lsp-signature-help"
     },
     opts = function()
       vim.api.nvim_set_hl(0, "CmpGhostText", { link = "Comment", default = true })
@@ -71,16 +71,13 @@ return {
             require("luasnip").lsp_expand(args.body)
           end,
         },
-        sources = cmp.config.sources(
-          {
-            { name = "nvim_lsp_signature_help" },
-            { name = "nvim_lsp" },
-            { name = "luasnip" },
-          }, {
-            { name = "buffer" },
-            { name = "path" },
-          }
-        ),
+        sources = cmp.config.sources({
+          { name = "nvim_lsp" },
+          { name = "luasnip" },
+        }, {
+          { name = "buffer" },
+          { name = "path" },
+        }),
         formatting = {
           format = function(_, item)
             local icons = require("lib.icons").kinds
@@ -97,14 +94,14 @@ return {
         },
         sorting = defaults.sorting,
       }
-    end
+    end,
   },
   {
     "L3MON4D3/LuaSnip",
     event = "VeryLazy",
     build = (not jit.os:find("Windows"))
         and "echo 'NOTE: jsregexp is optional, so not a big deal if it fails to build'; make install_jsregexp"
-        or nil,
+      or nil,
     dependencies = {
       {
         "rafamadriz/friendly-snippets",

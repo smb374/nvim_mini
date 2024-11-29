@@ -21,9 +21,10 @@ require("lazy").setup({
     },
     {
       "echasnovski/mini.nvim",
+      version = false,
       config = function()
         require("config.mini")
-      end
+      end,
     },
     { import = "plugins" },
     { import = "plugins.lang" },

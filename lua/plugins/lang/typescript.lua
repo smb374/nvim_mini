@@ -7,12 +7,12 @@ return {
         "tsx",
         "javascript",
       })
-    end
+    end,
   },
   {
     "nvim-lspconfig",
     opts = function(_, opts)
-      vim.list_extend(opts.ensure_installed, { "ts_ls" })
-    end
+      vim.list_extend(opts.external_servers, { "ts_ls" })
+    end,
   },
 }

@@ -7,13 +7,20 @@ return {
         "rust",
         "toml",
       })
-    end
+    end,
   },
   {
     "nvim-lspconfig",
     opts = function(_, opts)
       vim.list_extend(opts.ensure_installed, { "taplo" })
       vim.list_extend(opts.external_servers, { "rust_analyzer" })
-    end
-  }
+      opts.server_config.rust_analyzer = {
+        completion = {
+          autoimport = {
+            enable = true,
+          },
+        },
+      }
+    end,
+  },
 }

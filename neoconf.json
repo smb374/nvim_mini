@@ -2,6 +2,9 @@
   "lspconfig": {
     "hls": {
       "haskell.formattingProvider": "floskell"
+    },
+    "ts_ls": {
+      "preferences.importModuleSpecifierPreference": "non-relative"
     }
   }
 }
