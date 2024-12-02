@@ -3,12 +3,12 @@ return {
     "nvim-treesitter",
     opts = function(_, opts)
       vim.list_extend(opts.ensure_installed, { "c", "cpp" })
-    end
+    end,
   },
   {
     "nvim-lspconfig",
     opts = function(_, opts)
-      vim.list_extend(opts.ensure_installed, { "clangd" })
+      vim.list_extend(opts.external_servers, { "clangd" })
     end,
   },
 }
