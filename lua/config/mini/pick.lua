@@ -1,5 +1,7 @@
 require("mini.pick").setup()
 
+vim.ui.select = MiniPick.ui_select
+
 local map = vim.keymap.set
 
 map("n", "<leader>sR", function()
