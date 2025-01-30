@@ -25,7 +25,7 @@ return {
       return {
         preselect = cmp.PreselectMode.None,
         completion = {
-          completeopt = "menu,menuone,noselect,noinsert",
+          completeopt = vim.o.completeopt,
         },
         mapping = cmp.mapping.preset.insert({
           ["<Up>"] = cmp.mapping(function(fallback)

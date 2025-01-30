@@ -59,8 +59,25 @@ return {
       local lsp_zero = require("lsp-zero")
 
       local lspconfig_defaults = require("lspconfig").util.default_config
-      lspconfig_defaults.capabilities =
-        vim.tbl_deep_extend("force", lspconfig_defaults.capabilities, require("cmp_nvim_lsp").default_capabilities())
+      lspconfig_defaults.capabilities = vim.tbl_deep_extend(
+        "force",
+        lspconfig_defaults.capabilities,
+        -- require("cmp_nvim_lsp").default_capabilities()
+        require("cmp_nvim_lsp").default_capabilities({
+          resolveSupport = {
+            properties = {
+              "documentation",
+              "detail",
+              "additionalTextEdits",
+              "sortText",
+              "filterText",
+              "insertText",
+              "insertTextFormat",
+              "insertTextMode",
+            },
+          },
+        })
+      )
 
       local lsp_attach = function(client, bufnr)
         lsp_zero.default_keymaps({ buffer = bufnr, preserve_mappings = false })
