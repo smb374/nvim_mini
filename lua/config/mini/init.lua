@@ -13,6 +13,7 @@ require("config.mini.files")
 require("config.mini.hipatterns")
 require("config.mini.pick")
 require("config.mini.starter")
+require("config.mini.snippets")
 -- require("config.mini.statusline")
 require("config.mini.tabline")
 

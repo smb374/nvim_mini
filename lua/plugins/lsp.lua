@@ -34,7 +34,6 @@ return {
   },
   {
     "neovim/nvim-lspconfig",
-    -- event = { "BufReadPost", "BufNewFile", "BufWritePre" },
     dependencies = {
       {
         "folke/neoconf.nvim",
@@ -48,7 +47,7 @@ return {
       "mason.nvim",
       "williamboman/mason-lspconfig.nvim",
       "lukas-reineke/lsp-format.nvim",
-      "hrsh7th/cmp-nvim-lsp",
+      -- "hrsh7th/cmp-nvim-lsp",
     },
     opts = {
       external_servers = {},
@@ -57,27 +56,6 @@ return {
     },
     config = function(_, opts)
       local lsp_zero = require("lsp-zero")
-
-      local lspconfig_defaults = require("lspconfig").util.default_config
-      lspconfig_defaults.capabilities = vim.tbl_deep_extend(
-        "force",
-        lspconfig_defaults.capabilities,
-        -- require("cmp_nvim_lsp").default_capabilities()
-        require("cmp_nvim_lsp").default_capabilities({
-          resolveSupport = {
-            properties = {
-              "documentation",
-              "detail",
-              "additionalTextEdits",
-              "sortText",
-              "filterText",
-              "insertText",
-              "insertTextFormat",
-              "insertTextMode",
-            },
-          },
-        })
-      )
 
       local lsp_attach = function(client, bufnr)
         lsp_zero.default_keymaps({ buffer = bufnr, preserve_mappings = false })
@@ -101,6 +79,7 @@ return {
 
       require("mason-lspconfig").setup({
         ensure_installed = opts.ensure_installed,
+        automatic_installation = false,
         handlers = {
           lsp_zero.default_setup,
         },
@@ -112,11 +91,13 @@ return {
         else
           lspconfig[server].setup({
             mason = false,
+            capabilities = require("blink.cmp").get_lsp_capabilities({}),
           })
         end
       end
       for server, opt in pairs(opts.server_config) do
         opt.on_attach = lsp_attach
+        opt.capabilities = require("blink.cmp").get_lsp_capabilities(opt.capabilities)
         lspconfig[server].setup(opt)
       end
     end,

@@ -1,118 +1,111 @@
 return {
   {
-    "hrsh7th/nvim-cmp",
-    version = false, -- last release is way too old
-    event = "InsertEnter",
+    "saghen/blink.cmp",
+    -- optional: provides snippets for the snippet source
     dependencies = {
-      "hrsh7th/cmp-nvim-lsp",
-      "hrsh7th/cmp-buffer",
-      "hrsh7th/cmp-path",
-      "LuaSnip",
-      "saadparwaiz1/cmp_luasnip",
-      -- "hrsh7th/cmp-nvim-lsp-signature-help"
+      "rafamadriz/friendly-snippets",
     },
-    opts = function()
-      vim.api.nvim_set_hl(0, "CmpGhostText", { link = "Comment", default = true })
-      local cmp = require("cmp")
-      local defaults = require("cmp.config.default")()
-      local luasnip = require("luasnip")
-      local has_words_before = function()
-        unpack = unpack or table.unpack
-        local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-        return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-      end
 
-      return {
-        preselect = cmp.PreselectMode.None,
-        completion = {
-          completeopt = vim.o.completeopt,
-        },
-        mapping = cmp.mapping.preset.insert({
-          ["<Up>"] = cmp.mapping(function(fallback)
-            cmp.close()
-            fallback()
-          end, { "i" }),
-          ["<Down>"] = cmp.mapping(function(fallback)
-            cmp.close()
-            fallback()
-          end, { "i" }),
-          ["<C-n>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
-          ["<C-p>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
-          ["<C-b>"] = cmp.mapping.scroll_docs(-4),
-          ["<C-f>"] = cmp.mapping.scroll_docs(4),
-          ["<C-Space>"] = cmp.mapping.complete(),
-          ["<C-e>"] = cmp.mapping.abort(),
-          ["<CR>"] = cmp.mapping.confirm({ select = false }),
-          ["<Tab>"] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-              cmp.select_next_item()
-              -- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable()
-              -- they way you will only jump inside the snippet region
-            elseif luasnip.expand_or_locally_jumpable() then
-              luasnip.expand_or_jump()
-            elseif has_words_before() then
-              cmp.complete()
-            else
-              fallback()
+    -- use a release tag to download pre-built binaries
+    -- version = "*",
+    -- AND/OR build from source, requires nightly: https://rust-lang.github.io/rustup/concepts/channels.html#working-with-nightly-rust
+    -- build = 'cargo build --release',
+    -- If you use nix, you can build from source using latest nightly rust with:
+    build = "nix run .#build-plugin",
+
+    ---@module 'blink.cmp'
+    ---@type blink.cmp.Config
+    opts = {
+      -- 'default' for mappings similar to built-in completion
+      -- 'super-tab' for mappings similar to vscode (tab to accept, arrow keys to navigate)
+      -- 'enter' for mappings similar to 'super-tab' but with 'enter' to accept
+      -- See the full "keymap" documentation for information on defining your own keymap.
+      -- keymap = { preset = "default" },
+      keymap = {
+        ["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
+        ["<C-e>"] = { "hide", "fallback" },
+        ["<CR>"] = { "accept", "fallback" },
+
+        ["<Tab>"] = {
+          function(cmp)
+            if cmp.is_menu_visible() then
+              return cmp.select_next()
+            elseif cmp.snippet_active({ direction = 1 }) then
+              return cmp.snippet_forward()
             end
-          end, { "i", "s" }),
-          ["<S-Tab>"] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-              cmp.select_prev_item()
-            elseif luasnip.in_snippet() and luasnip.jumpable(-1) then
-              luasnip.jump(-1)
-            else
-              fallback()
-            end
-          end, { "i", "s" }),
-        }),
-        snippet = {
-          expand = function(args)
-            require("luasnip").lsp_expand(args.body)
           end,
+          "fallback",
         },
-        sources = cmp.config.sources({
-          { name = "nvim_lsp" },
-          { name = "luasnip" },
-        }, {
-          { name = "buffer" },
-          { name = "path" },
-        }),
-        formatting = {
-          format = function(_, item)
-            local icons = require("lib.icons").kinds
-            if icons[item.kind] then
-              item.kind = icons[item.kind] .. item.kind
+        ["<S-Tab>"] = {
+          function(cmp)
+            if cmp.is_menu_visible() then
+              return cmp.select_prev()
+            elseif cmp.snippet_active({ direction = -1 }) then
+              return cmp.snippet_backward()
             end
-            return item
           end,
+          "fallback",
         },
-        experimental = {
-          ghost_text = {
-            hl_group = "CmpGhostText",
+
+        ["<Up>"] = { "fallback" },
+        ["<Down>"] = { "fallback" },
+        ["<C-p>"] = { "select_prev", "fallback" },
+        ["<C-n>"] = { "select_next", "fallback" },
+
+        ["<C-b>"] = { "scroll_documentation_up", "fallback" },
+        ["<C-f>"] = { "scroll_documentation_down", "fallback" },
+
+        ["<C-k>"] = { "show_signature", "hide_signature", "fallback" },
+        cmdline = {
+          preset = "default",
+        },
+      },
+
+      appearance = {
+        -- Sets the fallback highlight groups to nvim-cmp's highlight groups
+        -- Useful for when your theme doesn't support blink.cmp
+        -- Will be removed in a future release
+        use_nvim_cmp_as_default = true,
+        -- Set to 'mono' for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
+        -- Adjusts spacing to ensure icons are aligned
+        nerd_font_variant = "mono",
+      },
+
+      -- Use mini.snippets.
+      snippets = { preset = "mini_snippets" },
+      -- Default list of enabled providers defined so that you can extend it
+      -- elsewhere in your config, without redefining it, due to `opts_extend`
+      sources = {
+        default = { "lsp", "path", "snippets", "buffer" },
+      },
+      signature = { enabled = true },
+      completion = {
+        keyword = { range = "full" },
+        list = {
+          selection = { preselect = false },
+        },
+        accept = { auto_brackets = { enabled = false } },
+        ghost_text = { enabled = true },
+        menu = {
+          draw = {
+            columns = {
+              { "kind_icon", "label", gap = 1 },
+              { "kind" },
+            },
+            treesitter = { "lsp" },
+            components = {
+              kind_icon = {
+                ellipsis = false,
+                text = function(ctx)
+                  local kind_icon, _, _ = require("mini.icons").get("lsp", ctx.kind)
+                  return kind_icon
+                end,
+              },
+            },
           },
         },
-        sorting = defaults.sorting,
-      }
-    end,
-  },
-  {
-    "L3MON4D3/LuaSnip",
-    event = "VeryLazy",
-    build = (not jit.os:find("Windows"))
-        and "echo 'NOTE: jsregexp is optional, so not a big deal if it fails to build'; make install_jsregexp"
-      or nil,
-    dependencies = {
-      {
-        "rafamadriz/friendly-snippets",
-        config = function()
-          require("luasnip.loaders.from_vscode").lazy_load()
-        end,
       },
     },
-    opts = {
-      history = true,
-      delete_check_events = "TextChanged",
-    },
+    opts_extend = { "sources.default" },
   },
 }
