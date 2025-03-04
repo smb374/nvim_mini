@@ -56,9 +56,6 @@ return {
         ["<C-f>"] = { "scroll_documentation_down", "fallback" },
 
         ["<C-k>"] = { "show_signature", "hide_signature", "fallback" },
-        cmdline = {
-          preset = "default",
-        },
       },
 
       appearance = {
@@ -69,6 +66,9 @@ return {
         -- Set to 'mono' for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
         -- Adjusts spacing to ensure icons are aligned
         nerd_font_variant = "mono",
+      },
+      fuzzy = {
+        implementation = "prefer_rust",
       },
 
       -- Use mini.snippets.
@@ -88,10 +88,10 @@ return {
         ghost_text = { enabled = true },
         menu = {
           draw = {
-            columns = {
-              { "kind_icon", "label", gap = 1 },
-              { "kind" },
-            },
+            -- columns = {
+            --   { "kind_icon", "label", "label_description", gap = 1 },
+            --   { "kind" },
+            -- },
             treesitter = { "lsp" },
             components = {
               kind_icon = {
@@ -99,6 +99,10 @@ return {
                 text = function(ctx)
                   local kind_icon, _, _ = require("mini.icons").get("lsp", ctx.kind)
                   return kind_icon
+                end,
+                highlight = function(ctx)
+                  local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
+                  return hl
                 end,
               },
             },
