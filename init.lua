@@ -6,4 +6,6 @@ end
 if not vim.g.vscode then
   vim.cmd("filetype plugin indent on")
   require("config")
+else
+  require("config.options")
 end

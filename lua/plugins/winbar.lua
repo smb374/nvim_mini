@@ -37,6 +37,9 @@ return {
         "spectre_panel",
         "toggleterm",
         "qf",
+        "minifiles",
+        "minipick",
+        "ministarter",
       },
     },
     config = function(_, opts)
