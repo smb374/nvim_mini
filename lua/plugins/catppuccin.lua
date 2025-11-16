@@ -3,6 +3,7 @@ return {
   "catppuccin/nvim",
   name = "catppuccin",
   opts = {
+    term_colors = true,
     integrations = {
       aerial = true,
       alpha = true,

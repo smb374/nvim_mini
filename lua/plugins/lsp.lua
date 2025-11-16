@@ -42,7 +42,6 @@ return {
         dependencies = { "nvim-lspconfig" },
       },
       { "folke/neodev.nvim", opts = {} },
-      { "VonHeikemen/lsp-zero.nvim", branch = "v4.x" },
       { "SmiteshP/nvim-navic", requires = "neovim/nvim-lspconfig" },
       "mason.nvim",
       "williamboman/mason-lspconfig.nvim",
@@ -55,50 +54,89 @@ return {
       server_config = {},
     },
     config = function(_, opts)
-      local lsp_zero = require("lsp-zero")
-
-      local lsp_attach = function(client, bufnr)
-        lsp_zero.default_keymaps({ buffer = bufnr, preserve_mappings = false })
+      local lsp_attach = function(client, buffer)
+        local map = function(m, lhs, rhs, desc)
+          local key_opts = { buffer = buffer, desc = desc, nowait = true }
+          vim.keymap.set(m, lhs, rhs, key_opts)
+        end
+        map("n", "K", "<cmd>lua vim.lsp.buf.hover({border = vim.g.lsp_zero_border_style})<cr>", "Hover documentation")
+        map(
+          "n",
+          "gs",
+          "<cmd>lua vim.lsp.buf.signature_help({border = vim.g.lsp_zero_border_style})<cr>",
+          "Show function signature"
+        )
+        map("n", "gd", "<cmd>lua vim.lsp.buf.definition()<cr>", "Go to definition")
+        map("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<cr>", "Go to declaration")
+        map("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<cr>", "Go to implementation")
+        map("n", "go", "<cmd>lua vim.lsp.buf.type_definition()<cr>", "Go to type definition")
+        map("n", "gr", "<cmd>lua vim.lsp.buf.references()<cr>", "Go to reference")
+        map("n", "<F2>", "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename symbol")
+        map("n", "<F3>", "<cmd>lua vim.lsp.buf.format({async = true})<cr>", "Format file")
+        map("x", "<F3>", "<cmd>lua vim.lsp.buf.format({async = true})<cr>", "Format selection")
+        map("n", "<F4>", "<cmd>lua vim.lsp.buf.code_action()<cr>", "Execute code action")
         if client.supports_method("textDocument/formatting") then
           require("lsp-format").on_attach(client)
         end
-        require("nvim-navic").attach(client, bufnr)
+        require("nvim-navic").attach(client, buffer)
       end
-      lsp_zero.extend_lspconfig({
-        capabilities = {
-          textDocument = {
-            foldingRange = {
-              dynamicRegistration = false,
-              lineFoldingOnly = true,
+
+      local capabilities = {
+        textDocument = {
+          foldingRange = {
+            dynamicRegistration = false,
+            lineFoldingOnly = true,
+          },
+          completion = {
+            completionItem = {
+              snippetSupport = true,
+              commitCharactersSupport = true,
+              deprecatedSupport = true,
+              preselectSupport = true,
+              tagSupport = { valueSet = { 1 } },
+              insertReplaceSupport = true,
+              resolveSupport = {
+                properties = {
+                  "documentation",
+                  "detail",
+                  "additionalTextEdits",
+                },
+              },
+              labelDetailsSupport = true,
             },
           },
         },
-        sign_text = true,
-        lsp_attach = lsp_attach,
+      }
+      vim.lsp.config("*", {
+        capabilities = capabilities,
+        root_markers = { ".git" },
       })
-
       require("mason-lspconfig").setup({
         ensure_installed = opts.ensure_installed,
+        automatic_enable = true,
         automatic_installation = false,
-        handlers = {
-          lsp_zero.default_setup,
-        },
       })
-      local lspconfig = require("lspconfig")
       for _, server in ipairs(opts.external_servers) do
         if opts.server_config[server] ~= nil then
           opts.server_config[server].mason = false
         else
-          lspconfig[server].setup({
+          vim.lsp.config(server, {
             mason = false,
-            capabilities = require("blink.cmp").get_lsp_capabilities({}),
+            capabilities = require("blink.cmp").get_lsp_capabilities(capabilities),
           })
+          vim.lsp.enable(server)
         end
       end
       for server, opt in pairs(opts.server_config) do
         opt.on_attach = lsp_attach
-        opt.capabilities = require("blink.cmp").get_lsp_capabilities(opt.capabilities)
-        lspconfig[server].setup(opt)
+        if opt.capabilities ~= nil then
+          local server_cap = vim.tbl_deep_extend("force", capabilities, opt.capabilities)
+          opt.capabilities = require("blink.cmp").get_lsp_capabilities(server_cap)
+        else
+          opt.capabilities = require("blink.cmp").get_lsp_capabilities(capabilities)
+        end
+        vim.lsp.config(server, opt)
+        vim.lsp.enable(server)
       end
     end,
   },

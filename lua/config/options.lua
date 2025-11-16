@@ -11,6 +11,7 @@ vim.g.autoformat = true
 -- * a pattern or array of patterns like `.git` or `lua`.
 -- * a function with signature `function(buf) -> string|string[]`
 vim.g.root_spec = { "lsp", { ".git", "lua" }, "cwd" }
+vim.g.c_syntax_for_h = true
 
 local opt = vim.opt
 
