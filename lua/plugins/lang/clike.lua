@@ -16,10 +16,12 @@ return {
           "clangd",
           "--background-index",
           "--clang-tidy",
-          "--header-insertion=iwyu",
-          "--completion-style=detailed",
           "--function-arg-placeholders",
+          "--all-scopes-completion",
           "--cross-file-rename",
+          "--completion-style=detailed",
+          "--header-insertion=iwyu",
+          "--header-insertion-decorators",
         },
         init_options = {
           clangdFileStatus = true, -- Provides information about activity on clangd’s per-file worker thread

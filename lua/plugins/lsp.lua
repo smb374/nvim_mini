@@ -37,7 +37,6 @@ return {
     dependencies = {
       {
         "folke/neoconf.nvim",
-        cmd = "Neoconf",
         config = true,
         dependencies = { "nvim-lspconfig" },
       },
@@ -55,26 +54,27 @@ return {
     },
     config = function(_, opts)
       local lsp_attach = function(client, buffer)
+        vim.lsp.set_log_level(vim.log.levels.DEBUG)
+        vim.lsp.log.set_format_func(vim.inspect)
         local map = function(m, lhs, rhs, desc)
           local key_opts = { buffer = buffer, desc = desc, nowait = true }
           vim.keymap.set(m, lhs, rhs, key_opts)
         end
-        map("n", "K", "<cmd>lua vim.lsp.buf.hover({border = vim.g.lsp_zero_border_style})<cr>", "Hover documentation")
-        map(
-          "n",
-          "gs",
-          "<cmd>lua vim.lsp.buf.signature_help({border = vim.g.lsp_zero_border_style})<cr>",
-          "Show function signature"
-        )
-        map("n", "gd", "<cmd>lua vim.lsp.buf.definition()<cr>", "Go to definition")
-        map("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<cr>", "Go to declaration")
-        map("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<cr>", "Go to implementation")
-        map("n", "go", "<cmd>lua vim.lsp.buf.type_definition()<cr>", "Go to type definition")
-        map("n", "gr", "<cmd>lua vim.lsp.buf.references()<cr>", "Go to reference")
-        map("n", "<F2>", "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename symbol")
-        map("n", "<F3>", "<cmd>lua vim.lsp.buf.format({async = true})<cr>", "Format file")
-        map("x", "<F3>", "<cmd>lua vim.lsp.buf.format({async = true})<cr>", "Format selection")
-        map("n", "<F4>", "<cmd>lua vim.lsp.buf.code_action()<cr>", "Execute code action")
+        map("n", "K", vim.lsp.buf.hover, "Hover documentation")
+        map("n", "gs", vim.lsp.buf.signature_help, "Show function signature")
+        map("n", "gd", vim.lsp.buf.definition, "Go to definition")
+        map("n", "gD", vim.lsp.buf.declaration, "Go to declaration")
+        map("n", "gi", vim.lsp.buf.implementation, "Go to implementation")
+        map("n", "go", vim.lsp.buf.type_definition, "Go to type definition")
+        map("n", "gr", vim.lsp.buf.references, "Go to reference")
+        map("n", "<F2>", vim.lsp.buf.rename, "Rename symbol")
+        map("n", "<F3>", function()
+          vim.lsp.buf.format({ async = true })
+        end, "Format file")
+        map("x", "<F3>", function()
+          vim.lsp.buf.format({ async = true })
+        end, "Format selection")
+        map("n", "<F4>", vim.lsp.buf.code_action, "Execute code action")
         if client.supports_method("textDocument/formatting") then
           require("lsp-format").on_attach(client)
         end
@@ -122,6 +122,7 @@ return {
         else
           vim.lsp.config(server, {
             mason = false,
+            on_attach = lsp_attach,
             capabilities = require("blink.cmp").get_lsp_capabilities(capabilities),
           })
           vim.lsp.enable(server)
@@ -139,5 +140,18 @@ return {
         vim.lsp.enable(server)
       end
     end,
+  },
+  {
+    "MysticalDevil/inlay-hints.nvim",
+    event = "LspAttach",
+    dependencies = { "neovim/nvim-lspconfig" },
+    config = true,
+  },
+  {
+    "jedrzejboczar/exrc.nvim",
+    dependencies = { "neovim/nvim-lspconfig" }, -- (optional)
+    config = true,
+    opts = { --[[ your config ]]
+    },
   },
 }

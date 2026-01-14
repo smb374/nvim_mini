@@ -14,13 +14,6 @@ return {
     opts = function(_, opts)
       vim.list_extend(opts.ensure_installed, { "taplo" })
       vim.list_extend(opts.external_servers, { "rust_analyzer" })
-      opts.server_config.rust_analyzer = {
-        completion = {
-          autoimport = {
-            enable = true,
-          },
-        },
-      }
     end,
   },
 }

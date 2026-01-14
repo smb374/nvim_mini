@@ -85,7 +85,7 @@ return {
           selection = { preselect = false },
         },
         accept = { auto_brackets = { enabled = false } },
-        ghost_text = { enabled = true },
+        ghost_text = { enabled = false },
         menu = {
           draw = {
             -- columns = {

@@ -52,7 +52,8 @@ opt.splitright = true -- Put new windows right of current
 opt.tabstop = 2 -- Number of spaces tabs count for
 opt.termguicolors = true -- True color support
 if not vim.g.vscode then
-  opt.timeoutlen = 300 -- Lower than default (1000) to quickly trigger which-key
+  opt.timeoutlen = 50 -- Lower than default (1000) to quickly trigger which-key
+  opt.ttimeoutlen = 50 -- Lower than default (1000) to quickly trigger which-key
 end
 opt.undofile = true
 opt.undolevels = 10000
