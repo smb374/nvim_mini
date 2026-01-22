@@ -33,6 +33,17 @@ return {
     end,
   },
   {
+    "folke/lazydev.nvim",
+    ft = "lua",
+    opts = {
+      library = {
+        -- See the configuration section for more details
+        -- Load luvit types when the `vim.uv` word is found
+        { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+      },
+    },
+  },
+  {
     "neovim/nvim-lspconfig",
     dependencies = {
       {
@@ -40,7 +51,6 @@ return {
         config = true,
         dependencies = { "nvim-lspconfig" },
       },
-      { "folke/neodev.nvim", opts = {} },
       { "SmiteshP/nvim-navic", requires = "neovim/nvim-lspconfig" },
       "mason.nvim",
       "williamboman/mason-lspconfig.nvim",
@@ -54,7 +64,7 @@ return {
     },
     config = function(_, opts)
       local lsp_attach = function(client, buffer)
-        vim.lsp.set_log_level(vim.log.levels.DEBUG)
+        vim.lsp.set_log_level(vim.log.levels.WARN)
         vim.lsp.log.set_format_func(vim.inspect)
         local map = function(m, lhs, rhs, desc)
           local key_opts = { buffer = buffer, desc = desc, nowait = true }
@@ -75,6 +85,10 @@ return {
           vim.lsp.buf.format({ async = true })
         end, "Format selection")
         map("n", "<F4>", vim.lsp.buf.code_action, "Execute code action")
+        map("n", "]e", vim.diagnostic.get_next({ severity = vim.diagnostic.severity.ERROR }), "Goto next error")
+        map("n", "[e", vim.diagnostic.get_prev({ severity = vim.diagnostic.severity.ERROR }), "Goto prev error")
+        map("n", "]w", vim.diagnostic.get_next({ severity = vim.diagnostic.severity.WARN }), "Goto next warn")
+        map("n", "[w", vim.diagnostic.get_prev({ severity = vim.diagnostic.severity.WARN }), "Goto prev warn")
         if client.supports_method("textDocument/formatting") then
           require("lsp-format").on_attach(client)
         end
