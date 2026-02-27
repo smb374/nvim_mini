@@ -33,17 +33,6 @@ return {
     end,
   },
   {
-    "folke/lazydev.nvim",
-    ft = "lua",
-    opts = {
-      library = {
-        -- See the configuration section for more details
-        -- Load luvit types when the `vim.uv` word is found
-        { path = "${3rd}/luv/library", words = { "vim%.uv" } },
-      },
-    },
-  },
-  {
     "neovim/nvim-lspconfig",
     dependencies = {
       {
@@ -86,18 +75,18 @@ return {
         end, "Format selection")
         map("n", "<F4>", vim.lsp.buf.code_action, "Execute code action")
         map("n", "]e", function()
-          vim.diagnostic.get_next({ severity = vim.diagnostic.severity.ERROR })
+          vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR })
         end, "Goto next error")
         map("n", "[e", function()
-          vim.diagnostic.get_prev({ severity = vim.diagnostic.severity.ERROR })
+          vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.ERROR })
         end, "Goto next error")
         map("n", "]w", function()
-          vim.diagnostic.get_next({ severity = vim.diagnostic.severity.WARN })
+          vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.WARN })
         end, "Goto next error")
         map("n", "[w", function()
-          vim.diagnostic.get_prev({ severity = vim.diagnostic.severity.WARN })
+          vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.WARN })
         end, "Goto next error")
-        if client.supports_method("textDocument/formatting") then
+        if client:supports_method("textDocument/formatting") then
           require("lsp-format").on_attach(client)
         end
         require("nvim-navic").attach(client, buffer)
@@ -162,12 +151,6 @@ return {
         vim.lsp.enable(server)
       end
     end,
-  },
-  {
-    "MysticalDevil/inlay-hints.nvim",
-    event = "LspAttach",
-    dependencies = { "neovim/nvim-lspconfig" },
-    config = true,
   },
   {
     "jedrzejboczar/exrc.nvim",

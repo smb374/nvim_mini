@@ -1,5 +1,16 @@
 return {
   {
+    "folke/lazydev.nvim",
+    ft = "lua", -- only load on lua files
+    opts = {
+      library = {
+        -- See the configuration section for more details
+        -- Load luvit types when the `vim.uv` word is found
+        { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+      },
+    },
+  },
+  {
     "saghen/blink.cmp",
     -- optional: provides snippets for the snippet source
     dependencies = {
@@ -7,9 +18,9 @@ return {
     },
 
     -- use a release tag to download pre-built binaries
-    -- version = "*",
+    version = "*",
     -- AND/OR build from source, requires nightly: https://rust-lang.github.io/rustup/concepts/channels.html#working-with-nightly-rust
-    build = "cargo build --release",
+    -- build = "cargo build --release",
     -- If you use nix, you can build from source using latest nightly rust with:
     -- build = "nix run .#build-plugin",
 
@@ -91,7 +102,7 @@ return {
       completion = {
         keyword = { range = "full" },
         list = {
-          selection = { preselect = false },
+          selection = { preselect = false, auto_insert = false },
         },
         accept = { auto_brackets = { enabled = false } },
         ghost_text = { enabled = false },
