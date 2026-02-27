@@ -6,7 +6,7 @@ return {
         "markdown",
         "markdown_inline",
       })
-    end
+    end,
   },
   {
     "mason.nvim",
@@ -25,8 +25,8 @@ return {
     opts = function(_, opts)
       opts.formatters_by_ft.markdown = {
         "markdownlint",
-      };
-    end
+      }
+    end,
   },
   {
     "nvim-lint",
@@ -34,12 +34,12 @@ return {
       opts.linters_by_ft.markdown = {
         "markdownlint",
       }
-    end
+    end,
   },
   {
     "iamcco/markdown-preview.nvim",
     cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-    build = "cd app && yarn install",
+    build = "cd app && npx --yes yarn@latest install",
     init = function()
       vim.g.mkdp_filetypes = { "markdown" }
     end,
